@@ -1,10 +1,11 @@
 const express = require('express');
-const { getTopics } = require('./controllers/topics.controller');
+const { getTopics, getArticleById } = require('./controllers/topics.controller');
 
 const app = express();
 app.use(express.json());
 
 app.get('/api/topics', getTopics);
+app.get('/api/articles/:id', getArticleById);
 
 // Error Handlers //
 
