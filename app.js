@@ -1,5 +1,6 @@
 const express = require('express');
-const { getTopics, getArticleById } = require('./controllers/topics.controller');
+const { getTopics } = require('./controllers/topics.controller');
+const { getArticleById } = require('./controllers/articles.controller');
 
 const app = express();
 app.use(express.json());
