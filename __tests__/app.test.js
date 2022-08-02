@@ -96,5 +96,11 @@ describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
 				expect(response.body.msg).toBe('Bad request');
 			});
 		});
+		test('Status 400: Bad request {inc_vote: banana}', () => {
+			const inc_vote = { inc_vote: 'banana' };
+			return request(app).patch('/api/articles/1').send(inc_vote).then((response) => {
+				expect(response.body.msg).toBe('Bad request');
+			});
+		});
 	});
 });
