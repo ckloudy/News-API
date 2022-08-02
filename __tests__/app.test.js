@@ -104,3 +104,23 @@ describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
 		});
 	});
 });
+
+describe('/api/users', () => {
+	describe('GET', () => {
+		test('Status 200: returns an array of users', () => {
+			return request(app).get('/api/users').expect(200).then((response) => {
+				expect(response.body.users).toEqual(expect.any(Array));
+			});
+		});
+		test('Status 200: returns an array with the correct properties', () => {
+			return request(app).get('/api/users').expect(200).then((response) => {
+				const allUsers = response.body.users;
+				allUsers.forEach((user) => {
+					expect(user.hasOwnProperty('username')).toBe(true);
+					expect(user.hasOwnProperty('name')).toBe(true);
+					expect(user.hasOwnProperty('avatar_url')).toBe(true);
+				});
+			});
+		});
+	});
+});
