@@ -13,3 +13,17 @@ exports.selectArticleById = (id) => {
 			return rows[0];
 		});
 };
+
+exports.updatedVotesByArticleById = (id, update) => {
+	return db
+		.query(`UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING*;`, [ id, update ])
+		.then(({ rows }) => {
+			if (rows.length === 0) {
+				return Promise.reject({ status: 404, msg: 'Article not found' });
+			}
+			if (rows.length === 0 && typeof update != 'Number') {
+				return Promise.reject({ status: 400, msg: 'Bad request' });
+			}
+			return rows[0];
+		});
+};
