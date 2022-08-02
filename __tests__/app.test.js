@@ -64,3 +64,37 @@ describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
 		});
 	});
 });
+
+describe('/api/articles/:article_id', () => {
+	describe('PATCH', () => {
+		test('Status 201: specified article_id article has been updated with votes incremented by passed object value', () => {
+			const inc_vote = { inc_vote: 5 };
+			return request(app).patch('/api/articles/1').send(inc_vote).expect(201).then((response) => {
+				expect(response.body.article.article_id).toBe(1);
+				expect(response.body.article.votes).toBe(105);
+			});
+		});
+		test('Status 201: specified article_id article has been updated with votes decremented by passed object value', () => {
+			const inc_vote = { inc_vote: -5 };
+			return request(app).patch('/api/articles/1').send(inc_vote).expect(201).then((response) => {
+				expect(response.body.article.article_id).toBe(1);
+				expect(response.body.article.votes).toBe(95);
+			});
+		});
+	});
+});
+
+describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
+	describe('PATCH ERROR', () => {
+		test('Status 404: Not Found', () => {
+			return request(app).get('/api/articles/99').expect(404).then((response) => {
+				expect(response.body.msg).toBe('Article not found');
+			});
+		});
+		test('Status 400: Bad request', () => {
+			return request(app).get('/api/articles/notAnId').expect(400).then((response) => {
+				expect(response.body.msg).toBe('Bad request');
+			});
+		});
+	});
+});
