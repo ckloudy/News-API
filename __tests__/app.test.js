@@ -16,9 +16,11 @@ describe('/api/topics', () => {
 		});
 		test('Status 200: returns an array with the correct properties', () => {
 			return request(app).get('/api/topics').expect(200).then((response) => {
-				expect(Object.keys(response.body.topics[0])).toEqual(
-					expect.arrayContaining([ 'slug', 'description' ])
-				);
+				const allTopics = response.body.topics;
+				allTopics.forEach((topic) => {
+					expect(topic.hasOwnProperty('slug')).toBe(true);
+					expect(topic.hasOwnProperty('description')).toBe(true);
+				});
 			});
 		});
 	});
@@ -34,17 +36,30 @@ describe('/api/notARoute', () => {
 
 describe('/api/articles/:article_id', () => {
 	describe('GET', () => {
-		test('returns an article by a passed ID number', () => {
+		test('returns an article by an ID number', () => {
 			return request(app).get('/api/articles/1').expect(200).then((response) => {
-				expect(response.body.articles).toEqual({
-					author: 'butter_bridge',
-					title: 'Living in the shadow of a great man',
-					article_id: 1,
-					body: 'I find this existence challenging',
-					topic: 'mitch',
-					created_at: '2020-07-09T20:11:00.000Z',
-					votes: 100
-				});
+				const article = response.body.article;
+				expect(article.author).toEqual(expect.any(String)),
+					expect(article.article_id).toBe(1),
+					expect(article.title).toEqual(expect.any(String)),
+					expect(article.topic).toEqual(expect.any(String)),
+					expect(article.created_at).toEqual(expect.any(String)),
+					expect(article.votes).toEqual(expect.any(Number));
+			});
+		});
+	});
+});
+
+describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
+	describe('GET ERROR', () => {
+		test('Status 404: Not Found', () => {
+			return request(app).get('/api/articles/99').expect(404).then((response) => {
+				expect(response.body.msg).toBe('Article not found');
+			});
+		});
+		test('Status 400: Bad request', () => {
+			return request(app).get('/api/articles/notAnId').expect(400).then((response) => {
+				expect(response.body.msg).toBe('Bad request');
 			});
 		});
 	});
