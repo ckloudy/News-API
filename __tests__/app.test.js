@@ -16,9 +16,11 @@ describe('/api/topics', () => {
 		});
 		test('Status 200: returns an array with the correct properties', () => {
 			return request(app).get('/api/topics').expect(200).then((response) => {
-				expect(Object.keys(response.body.topics[0])).toEqual(
-					expect.arrayContaining([ 'slug', 'description' ])
-				);
+				const allTopics = response.body.topics;
+				allTopics.forEach((topic) => {
+					expect(topic.hasOwnProperty('slug')).toBe(true);
+					expect(topic.hasOwnProperty('description')).toBe(true);
+				});
 			});
 		});
 	});
@@ -28,6 +30,37 @@ describe('/api/notARoute', () => {
 	describe('GET ERROR', () => {
 		test('Status 404: Not Found', () => {
 			return request(app).get('/api/notARoute').expect(404);
+		});
+	});
+});
+
+describe('/api/articles/:article_id', () => {
+	describe('GET', () => {
+		test('returns an article by an ID number', () => {
+			return request(app).get('/api/articles/1').expect(200).then((response) => {
+				const article = response.body.article;
+				expect(article.author).toEqual(expect.any(String)),
+					expect(article.article_id).toBe(1),
+					expect(article.title).toEqual(expect.any(String)),
+					expect(article.topic).toEqual(expect.any(String)),
+					expect(article.created_at).toEqual(expect.any(String)),
+					expect(article.votes).toEqual(expect.any(Number));
+			});
+		});
+	});
+});
+
+describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
+	describe('GET ERROR', () => {
+		test('Status 404: Not Found', () => {
+			return request(app).get('/api/articles/99').expect(404).then((response) => {
+				expect(response.body.msg).toBe('Article not found');
+			});
+		});
+		test('Status 400: Bad request', () => {
+			return request(app).get('/api/articles/notAnId').expect(400).then((response) => {
+				expect(response.body.msg).toBe('Bad request');
+			});
 		});
 	});
 });
