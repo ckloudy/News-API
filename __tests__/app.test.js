@@ -87,12 +87,12 @@ describe('/api/articles/:article_id', () => {
 describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
 	describe('PATCH ERROR', () => {
 		test('Status 404: Not Found', () => {
-			return request(app).get('/api/articles/99').expect(404).then((response) => {
+			return request(app).patch('/api/articles/99').expect(404).then((response) => {
 				expect(response.body.msg).toBe('Article not found');
 			});
 		});
 		test('Status 400: Bad request', () => {
-			return request(app).get('/api/articles/notAnId').expect(400).then((response) => {
+			return request(app).patch('/api/articles/notAnId').expect(400).then((response) => {
 				expect(response.body.msg).toBe('Bad request');
 			});
 		});
