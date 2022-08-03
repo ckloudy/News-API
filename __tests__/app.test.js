@@ -7,7 +7,7 @@ const testData = require('../db/data/test-data/index');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe('GOOD ENDPOINTS\n', () => {
+describe('\nGOOD ENDPOINTS\n', () => {
 	describe('/api/topics', () => {
 		describe('GET', () => {
 			test('Status 200: returns an array of topics', () => {
@@ -125,7 +125,7 @@ describe('GOOD ENDPOINTS\n', () => {
 	});
 });
 
-describe('ERROR HANDLING\n', () => {
+describe('\nERROR HANDLING\n', () => {
 	describe('/api/notARoute', () => {
 		describe('GET ERROR', () => {
 			test('Status 404: Not Found', () => {
