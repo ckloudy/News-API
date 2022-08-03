@@ -14,7 +14,7 @@ describe('/api/topics', () => {
 				expect(response.body.topics).toEqual(expect.any(Array));
 			});
 		});
-		test('Status 200: returns an array with the correct properties', () => {
+		test('Status 200: returns an array of objects with the correct properties', () => {
 			return request(app).get('/api/topics').expect(200).then((response) => {
 				const allTopics = response.body.topics;
 				allTopics.forEach((topic) => {
@@ -112,7 +112,7 @@ describe('/api/users', () => {
 				expect(response.body.users).toEqual(expect.any(Array));
 			});
 		});
-		test('Status 200: returns an array with the correct properties', () => {
+		test('Status 200: returns an array of objects with the correct properties', () => {
 			return request(app).get('/api/users').expect(200).then((response) => {
 				const allUsers = response.body.users;
 				allUsers.forEach((user) => {
