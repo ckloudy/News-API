@@ -58,7 +58,7 @@ describe('\nGOOD ENDPOINTS\n', () => {
 	});
 	describe('/api/articles/:article_id', () => {
 		describe('GET', () => {
-			test('returns an article by an ID number', () => {
+			test('Status 200: returns an article by an ID number', () => {
 				return request(app).get('/api/articles/1').expect(200).then((response) => {
 					const article = response.body.article;
 					expect(article.author).toEqual(expect.any(String)),
@@ -69,7 +69,7 @@ describe('\nGOOD ENDPOINTS\n', () => {
 						expect(article.votes).toEqual(expect.any(Number));
 				});
 			});
-			test('returns an article by an ID number with a comment count column', () => {
+			test('Status 200: returns an article by an ID number with a comment count column', () => {
 				return request(app).get('/api/articles/1').expect(200).then((response) => {
 					const article = response.body.article;
 					expect(article).toHaveProperty('comment_count');
