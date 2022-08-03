@@ -3,7 +3,11 @@ const db = require('../db/connection');
 exports.selectArticleById = (id) => {
 	return db
 		.query(
-			`SELECT author, title, article_id, body, topic, created_at, votes FROM articles WHERE article_id = $1;`,
+			`SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, CAST(COUNT(comments) AS INT) AS comment_count
+			FROM articles
+			LEFT JOIN comments ON articles.article_id = comments.article_id
+			WHERE articles.article_id = $1
+			GROUP BY articles.article_id;`,
 			[ id ]
 		)
 		.then(({ rows }) => {
