@@ -14,7 +14,7 @@ describe('/api/topics', () => {
 				expect(response.body.topics).toEqual(expect.any(Array));
 			});
 		});
-		test('Status 200: returns an array with the correct properties', () => {
+		test('Status 200: returns an array of objects with the correct properties', () => {
 			return request(app).get('/api/topics').expect(200).then((response) => {
 				const allTopics = response.body.topics;
 				allTopics.forEach((topic) => {
@@ -100,6 +100,26 @@ describe('/api/articles/99(404) & /api/articles/notAnId(400)', () => {
 			const inc_vote = { inc_vote: 'banana' };
 			return request(app).patch('/api/articles/1').send(inc_vote).then((response) => {
 				expect(response.body.msg).toBe('Bad request');
+			});
+		});
+	});
+});
+
+describe('/api/users', () => {
+	describe('GET', () => {
+		test('Status 200: returns an array of users', () => {
+			return request(app).get('/api/users').expect(200).then((response) => {
+				expect(response.body.users).toEqual(expect.any(Array));
+			});
+		});
+		test('Status 200: returns an array of objects with the correct properties', () => {
+			return request(app).get('/api/users').expect(200).then((response) => {
+				const allUsers = response.body.users;
+				allUsers.forEach((user) => {
+					expect(user.hasOwnProperty('username')).toBe(true);
+					expect(user.hasOwnProperty('name')).toBe(true);
+					expect(user.hasOwnProperty('avatar_url')).toBe(true);
+				});
 			});
 		});
 	});

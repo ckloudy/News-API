@@ -3,14 +3,16 @@ const { handleCustomErrors, handlePsqlErrors, unrecognisedPathError } = require(
 
 const { getTopics } = require('./controllers/topics.controller');
 const { getArticleById, updateArticleById } = require('./controllers/articles.controller');
+const { getUsers } = require('./controllers/users.controller');
 
 const app = express();
-
 app.use(express.json());
 
 app.get('/api/topics', getTopics);
 app.get('/api/articles/:id', getArticleById);
 app.patch('/api/articles/:id', updateArticleById);
+
+app.get('/api/users', getUsers);
 
 // Error Handlers //
 
