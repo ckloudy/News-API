@@ -56,7 +56,7 @@ describe('/api/articles/:article_id', () => {
 					expect(article.topic).toEqual(expect.any(String)),
 					expect(article.created_at).toEqual(expect.any(String)),
 					expect(article.votes).toEqual(expect.any(Number));
-				expect(article.hasOwnProperty('comment_count')).toBe(true);
+				expect(article).toHaveProperty('comment_count');
 				expect(article.comment_count).toEqual(expect.any(Number));
 			});
 		});
