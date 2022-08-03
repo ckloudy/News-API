@@ -47,6 +47,19 @@ describe('/api/articles/:article_id', () => {
 					expect(article.votes).toEqual(expect.any(Number));
 			});
 		});
+		test('returns an article by an ID number with a comment count column', () => {
+			return request(app).get('/api/articles/1').expect(200).then((response) => {
+				const article = response.body.article;
+				expect(article.author).toEqual(expect.any(String)),
+					expect(article.article_id).toBe(1),
+					expect(article.title).toEqual(expect.any(String)),
+					expect(article.topic).toEqual(expect.any(String)),
+					expect(article.created_at).toEqual(expect.any(String)),
+					expect(article.votes).toEqual(expect.any(Number));
+				expect(article.hasOwnProperty('comment_count')).toBe(true);
+				expect(article.comment_count).toEqual(expect.any(Number));
+			});
+		});
 	});
 });
 
