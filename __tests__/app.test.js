@@ -37,19 +37,7 @@ describe('\nGOOD ENDPOINTS\n', () => {
 				return request(app).get('/api/articles').expect(200).then((response) => {
 					const allArticles = response.body.articles;
 					allArticles.forEach((article) => {
-						expect(article).toHaveProperty('author');
-						expect(article).toHaveProperty('title');
-						expect(article).toHaveProperty('article_id');
-						expect(article).toHaveProperty('topic');
-						expect(article).toHaveProperty('created_at');
-						expect(article).toHaveProperty('votes');
 						expect(article).toHaveProperty('comment_count');
-						expect(article.author).toEqual(expect.any(String));
-						expect(article.title).toEqual(expect.any(String));
-						expect(article.article_id).toEqual(expect.any(Number));
-						expect(article.topic).toEqual(expect.any(String));
-						expect(article.created_at).toEqual(expect.any(String));
-						expect(article.votes).toEqual(expect.any(Number));
 						expect(article.comment_count).toEqual(expect.any(Number));
 					});
 				});
