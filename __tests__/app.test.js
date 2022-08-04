@@ -112,6 +112,12 @@ describe('\nGOOD ENDPOINTS\n', () => {
 					});
 				});
 			});
+			test('Status 200: returns a message if the article does not have any comments', () => {
+				return request(app).get('/api/articles/2/comments').expect(200).then((response) => {
+					const comments = response.body.comments;
+					expect(comments).toEqual(expect.any(Array));
+				});
+			});
 		});
 	});
 	describe('/api/users', () => {
