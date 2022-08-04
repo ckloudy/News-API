@@ -21,7 +21,7 @@ exports.selectArticleById = (id) => {
 			FROM articles
 			LEFT JOIN comments ON articles.article_id = comments.article_id
 			WHERE articles.article_id = $1
-			GROUP BY articles.article_id`,
+			GROUP BY articles.article_id;`,
 			[ id ]
 		)
 		.then(({ rows }) => {
@@ -29,6 +29,24 @@ exports.selectArticleById = (id) => {
 				return Promise.reject({ status: 404, msg: 'Article not found' });
 			}
 			return rows[0];
+		});
+};
+
+exports.checkArticleExists = (id) => {
+	return db.query(`SELECT * FROM articles WHERE article_id = $1`, [ id ]).then(({ rows }) => {
+		if (rows.length === 0) {
+			return Promise.reject({ status: 404, msg: 'Article not found' });
+		}
+	});
+};
+
+exports.selectCommentsForArticleId = (id) => {
+	return db
+		.query(`SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;`, [
+			id
+		])
+		.then(({ rows }) => {
+			return rows;
 		});
 };
 
