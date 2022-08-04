@@ -92,6 +92,28 @@ describe('\nGOOD ENDPOINTS\n', () => {
 			});
 		});
 	});
+	describe('/api/articles/:article_id/comments', () => {
+		describe('GET', () => {
+			test('Status 200: returns an array of comments for the given article ID', () => {
+				return request(app).get('/api/articles/1/comments').expect(200).then((response) => {
+					const comments = response.body.comments;
+					expect(comments).toEqual(expect.any(Array));
+				});
+			});
+			test('Status 200: returns an array with the correct properties', () => {
+				return request(app).get('/api/articles/1/comments').expect(200).then((response) => {
+					const comments = response.body.comments;
+					comments.forEach((comment) => {
+						expect(comment).toHaveProperty('comment_id');
+						expect(comment).toHaveProperty('votes');
+						expect(comment).toHaveProperty('created_at');
+						expect(comment).toHaveProperty('author');
+						expect(comment).toHaveProperty('body');
+					});
+				});
+			});
+		});
+	});
 	describe('/api/users', () => {
 		describe('GET', () => {
 			test('Status 200: returns an array of users', () => {
@@ -116,8 +138,10 @@ describe('\nGOOD ENDPOINTS\n', () => {
 describe('\nERROR HANDLING\n', () => {
 	describe('/api/notARoute', () => {
 		describe('GET ERROR', () => {
-			test('Status 404: Not Found', () => {
-				return request(app).get('/api/notARoute').expect(404);
+			test('Status 404: Path not found', () => {
+				return request(app).get('/api/notARoute').expect(404).then((response) => {
+					expect(response.body.msg).toBe('Path not found');
+				});
 			});
 		});
 	});
@@ -151,6 +175,28 @@ describe('\nERROR HANDLING\n', () => {
 				const inc_vote = { inc_vote: 'banana' };
 				return request(app).patch('/api/articles/1').send(inc_vote).then((response) => {
 					expect(response.body.msg).toBe('Bad request');
+				});
+			});
+		});
+	});
+	describe('/api/articles/notAnId/comments & /api/articles/1/notApath & /api/articles/99/comments', () => {
+		describe('GET ERROR', () => {
+			test('Status 404: Not Found', () => {
+				return request(app)
+					.get('/api/articles/notAnId/comments')
+					.expect(400)
+					.then((response) => {
+						expect(response.body.msg).toBe('Bad request');
+					});
+			});
+			test('Status 404: Path not found - /api/articles/1/notAath', () => {
+				return request(app).get('/api/articles/1/notApath').expect(404).then((response) => {
+					expect(response.body.msg).toBe('Path not found');
+				});
+			});
+			test('Status 404: Not Found', () => {
+				return request(app).get('/api/articles/99/comments').expect(404).then((response) => {
+					expect(response.body.msg).toBe('Article not found');
 				});
 			});
 		});
