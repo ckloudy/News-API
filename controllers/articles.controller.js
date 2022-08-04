@@ -2,7 +2,8 @@ const {
 	selectArticles,
 	selectArticleById,
 	updatedVotesByArticleById,
-	selectCommentsForArticleId
+	selectCommentsForArticleId,
+	checkArticleExists
 } = require('../models/articles.model');
 
 exports.getArticles = (req, res, next) => {
@@ -24,8 +25,8 @@ exports.getArticleById = (req, res, next) => {
 
 exports.getCommentsForArticleId = (req, res, next) => {
 	const { id } = req.params;
-	selectCommentsForArticleId(id)
-		.then((comments) => {
+	Promise.all([ checkArticleExists(id), selectCommentsForArticleId(id) ])
+		.then(([ , comments ]) => {
 			res.status(200).send({ comments });
 		})
 		.catch(next);
