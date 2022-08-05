@@ -3,6 +3,7 @@ const request = require('supertest');
 const db = require('../db/connection.js');
 const seed = require('../db/seeds/seed');
 const testData = require('../db/data/test-data/index');
+require('jest-sorted');
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -41,6 +42,20 @@ describe('\nGOOD ENDPOINTS\n', () => {
 						expect(article.comment_count).toEqual(expect.any(Number));
 					});
 				});
+			});
+		});
+	});
+	describe('/api/articles?QUERY', () => {
+		describe('GET', () => {
+			test('Status 200: returns an array of articles sorted by author in ascending order', () => {
+				return request(app)
+					.get('/api/articles?sort_by=author&order=ASC&topic=mitch')
+					.expect(200)
+					.then((response) => {
+						const articles = response.body.articles;
+						expect(articles).toEqual(expect.any(Array));
+						expect(articles).toBeSortedBy('topic', { ascending: true });
+					});
 			});
 		});
 	});
@@ -260,6 +275,26 @@ describe('\nERROR HANDLING\n', () => {
 				return request(app).get('/api/articles/99/comments').expect(404).then((response) => {
 					expect(response.body.msg).toBe('Article not found');
 				});
+			});
+		});
+	});
+	describe('/api/articles/?QUERY', () => {
+		describe('GET ERROR', () => {
+			test('Status 404: Topic not found', () => {
+				return request(app)
+					.get('/api/articles?sort_by=author&topic=notAtopic')
+					.expect(404)
+					.then((response) => {
+						expect(response.body.msg).toBe('Topic not found');
+					});
+			});
+			test('Status 400: Invalid Query', () => {
+				return request(app)
+					.get('/api/articles?sort_by=noAvalidColumn')
+					.expect(400)
+					.then((response) => {
+						expect(response.body.msg).toBe('Invalid Query');
+					});
 			});
 		});
 	});
