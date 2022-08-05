@@ -3,16 +3,20 @@ const {
 	selectArticleById,
 	updatedVotesByArticleById,
 	selectCommentsForArticleId,
-	checkArticleExists,
 	insertCommentOnArticleId
 } = require('../models/articles.model');
 
-const { checkUserExists } = require('../models/users.model');
+const { checkArticleExists, checkTopic, checkUserExists } = require('../db/seeds/utils');
 
 exports.getArticles = (req, res, next) => {
-	selectArticles()
+	const { sort_by, order, topic } = req.query;
+	const promiseArray = [ selectArticles(sort_by, order, topic) ];
+	if (topic !== undefined) {
+		promiseArray.push(checkTopic(topic));
+	}
+	Promise.all(promiseArray)
 		.then((articles) => {
-			res.status(200).send({ articles });
+			res.status(200).send({ articles: articles[0] });
 		})
 		.catch(next);
 };
