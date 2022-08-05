@@ -66,7 +66,7 @@ describe('\nGOOD ENDPOINTS\n', () => {
 			});
 		});
 	});
-	describe('/api/articles/:article_id', () => {
+	describe('/api/articles/:article_id - PATCH', () => {
 		describe('PATCH', () => {
 			test('Status 201: specified article_id article has been updated with votes incremented by passed object value', () => {
 				const inc_vote = { inc_vote: 5 };
@@ -99,6 +99,42 @@ describe('\nGOOD ENDPOINTS\n', () => {
 					const comments = response.body.comments;
 					expect(comments).toEqual(expect.any(Array));
 				});
+			});
+			test('Status 200: returns an array with the correct properties', () => {
+				return request(app).get('/api/articles/1/comments').expect(200).then((response) => {
+					const comments = response.body.comments;
+					comments.forEach((comment) => {
+						expect(comment).toHaveProperty('comment_id');
+						expect(comment).toHaveProperty('votes');
+						expect(comment).toHaveProperty('created_at');
+						expect(comment).toHaveProperty('author');
+						expect(comment).toHaveProperty('body');
+					});
+				});
+			});
+			test('Status 200: returns a message if the article does not have any comments', () => {
+				return request(app).get('/api/articles/2/comments').expect(200).then((response) => {
+					const comments = response.body.comments;
+					expect(comments).toEqual([]);
+				});
+			});
+		});
+	});
+	describe('/api/articles/:article_id/comments - POST', () => {
+		describe('POST', () => {
+			test('Status 201: adds a comment to the given article ID', () => {
+				const newComment = {
+					username: 'rogersop',
+					body: 'This is a new dumb comment or meme'
+				};
+				return request(app)
+					.post('/api/articles/1/comments')
+					.send(newComment)
+					.expect(201)
+					.then((response) => {
+						const comment = response.body.comment;
+						expect(comment).toEqual(expect.any(Object));
+					});
 			});
 			test('Status 200: returns an array with the correct properties', () => {
 				return request(app).get('/api/articles/1/comments').expect(200).then((response) => {
@@ -195,12 +231,32 @@ describe('\nERROR HANDLING\n', () => {
 						expect(response.body.msg).toBe('Bad request');
 					});
 			});
-			test('Status 404: Path not found - /api/articles/1/notAath', () => {
+			test('Status 404: Path not found - /api/articles/1/notApath', () => {
 				return request(app).get('/api/articles/1/notApath').expect(404).then((response) => {
 					expect(response.body.msg).toBe('Path not found');
 				});
 			});
-			test('Status 404: Not Found', () => {
+			test('Status 404: Article Not Found', () => {
+				return request(app).get('/api/articles/99/comments').expect(404).then((response) => {
+					expect(response.body.msg).toBe('Article not found');
+				});
+			});
+		});
+		describe('POST ERROR', () => {
+			test('Not A User - Status 404: Must be logged in', () => {
+				const newComment = {
+					username: 'Damian',
+					body: 'Another dumb comment or meme'
+				};
+				return request(app)
+					.post('/api/articles/1/comments')
+					.send(newComment)
+					.expect(404)
+					.then((response) => {
+						expect(response.body.msg).toBe('Must be logged in');
+					});
+			});
+			test('Status 404: Article Not Found', () => {
 				return request(app).get('/api/articles/99/comments').expect(404).then((response) => {
 					expect(response.body.msg).toBe('Article not found');
 				});
