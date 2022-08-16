@@ -1,13 +1,18 @@
 const express = require('express');
-const { handleCustomErrors, handlePsqlErrors, unrecognisedPathError } = require('./error_handlers');
+const {
+  handleCustomErrors,
+  handlePsqlErrors,
+  unrecognisedPathError
+} = require('./error_handlers');
 
 const { getTopics } = require('./controllers/topics.controller');
 const {
-	getArticles,
-	getArticleById,
-	updateArticleById,
-	getCommentsForArticleId,
-	addCommentOnArticleId
+  getArticles,
+  getArticleById,
+  updateArticleById,
+  getCommentsForArticleId,
+  addCommentOnArticleId,
+  removeCommentById
 } = require('./controllers/articles.controller');
 const { getUsers } = require('./controllers/users.controller');
 
@@ -20,6 +25,7 @@ app.get('/api/articles/:id', getArticleById);
 app.get('/api/articles/:id/comments', getCommentsForArticleId);
 app.patch('/api/articles/:id', updateArticleById);
 app.post('/api/articles/:id/comments', addCommentOnArticleId);
+app.delete('/api/comments/:id', removeCommentById);
 
 app.get('/api/users', getUsers);
 
