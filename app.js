@@ -15,10 +15,12 @@ const {
   removeCommentById
 } = require('./controllers/articles.controller');
 const { getUsers } = require('./controllers/users.controller');
+const { getEndpoints } = require('./controllers/api.controller');
 
 const app = express();
 app.use(express.json());
 
+app.get('/api', getEndpoints);
 app.get('/api/topics', getTopics);
 app.get('/api/articles', getArticles);
 app.get('/api/articles/:id', getArticleById);
