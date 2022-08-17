@@ -86,7 +86,7 @@ exports.insertCommentOnArticleId = (id, newComment) => {
 
 exports.removeComment = (id) => {
   return db
-    .query(`DELETE FROM comments WHERE comment_id = $1`, [ id ])
+    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING*`, [ id ])
     .then(({ rows }) => {
       return rows;
     });
