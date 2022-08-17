@@ -9,6 +9,16 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe('\nGOOD ENDPOINTS\n', () => {
+  describe('/api', () => {
+    describe('GET', () => {
+      test('Status 200: returns an object of endpoints', () => {
+        return request(app).get('/api').expect(200).then((response) => {
+          console.log(response.body);
+          expect(response.body).toEqual(expect.any(Object));
+        });
+      });
+    });
+  });
   describe('/api/topics', () => {
     describe('GET', () => {
       test('Status 200: returns an array of topics', () => {
