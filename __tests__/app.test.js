@@ -13,7 +13,6 @@ describe('\nGOOD ENDPOINTS\n', () => {
     describe('GET', () => {
       test('Status 200: returns an object of endpoints', () => {
         return request(app).get('/api').expect(200).then((response) => {
-          console.log(response.body);
           expect(response.body).toEqual(expect.any(Object));
         });
       });
