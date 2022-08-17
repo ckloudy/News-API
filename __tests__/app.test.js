@@ -13,7 +13,7 @@ describe('\nGOOD ENDPOINTS\n', () => {
     describe('GET', () => {
       test('Status 200: returns an object of endpoints', () => {
         return request(app).get('/api').expect(200).then((response) => {
-          expect(response.body).toEqual(expect.any(Object));
+          expect(Object.keys(response.body.endpoints)).toHaveLength(9);
         });
       });
     });
