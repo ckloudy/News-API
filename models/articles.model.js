@@ -1,7 +1,14 @@
 const db = require('../db/connection');
 
 exports.selectArticles = (sort = 'created_at', order = 'DESC', topic) => {
-  const sortValues = [ 'article_id', 'title', 'author', 'created_at', 'votes' ];
+  const sortValues = [
+    'article_id',
+    'title',
+    'author',
+    'created_at',
+    'votes',
+    'comment_count'
+  ];
   const orderValues = [ 'ASC', 'DESC' ];
   let topicValue = [];
 
