@@ -69,7 +69,7 @@ describe('\nGOOD ENDPOINTS\n', () => {
           .then((response) => {
             const articles = response.body.articles;
             expect(articles).toEqual(expect.any(Array));
-            expect(articles).toBeSortedBy('topic', { ascending: true });
+            expect(articles).toBeSortedBy('author', { ascending: true });
           });
       });
     });
@@ -111,7 +111,6 @@ describe('\nGOOD ENDPOINTS\n', () => {
           .send(inc_vote)
           .expect(201)
           .then((response) => {
-            console.log(response.body.article);
             expect(response.body.article.article_id).toBe(1);
             expect(response.body.article.votes).toBe(105);
           });

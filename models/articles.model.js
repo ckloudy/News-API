@@ -22,7 +22,7 @@ exports.selectArticles = (sort = 'created_at', order = 'DESC', topic) => {
   }
 
   const groupByStr = `GROUP BY articles.article_id `;
-  const orderStr = `ORDER BY articles.${sort} ${order};`;
+  const orderStr = `ORDER BY ${sort} ${order};`;
 
   if (sortValues.includes(sort) && orderValues.includes(order)) {
     return db
