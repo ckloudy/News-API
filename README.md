@@ -2,11 +2,9 @@
 
 ## Link to a hosted version of the project
 
-https://dnc-news.herokuapp.com/api
+https://news-api-rb8r.onrender.com/api
 
 ## Project Summary
-
-
 
 ## Environment variables required
 
@@ -14,6 +12,3 @@ In order to successfully connect to the two databases for this project you must 
 
 .env.test - PGDATABASE=nc_news_test
 .env.development - PGDATABASE=nc_news
-
-
-
