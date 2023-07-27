@@ -2,7 +2,11 @@
 
 ## Link to a hosted version of the project
 
+<<<<<<< HEAD
 https://news-api-rb8r.onrender.com/api
+=======
+[https://dnc-news.herokuapp.com/api](https://news-api-rb8r.onrender.com/api)
+>>>>>>> refs/remotes/origin/main
 
 ## Project Summary
 
